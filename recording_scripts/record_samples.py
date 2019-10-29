@@ -16,10 +16,8 @@ RECORD_SECONDS = 3 # seconds to allow recording per sample
 # recording function
 
 def record(text, file_name):
-    print
     print("** Grabando **")
-    print
-    print("Lee en voz alta:   \'{}\'   ".format(text))
+    print(("Lee en voz alta:   \'{}\'   ".format(text)))
 
     p = pyaudio.PyAudio()
     stream = p.open(format=FORMAT,channels=CHANNELS,rate=RATE,input=True,frames_per_buffer=CHUNK)
@@ -46,7 +44,7 @@ def record(text, file_name):
 def main(subject_n, sentence_txt):
     sentence_set = codecs.open(sentence_txt, 'r', ).read().split('\n')
     random.shuffle(sentence_set)
-    if raw_input("Si estas listo escribe \'comenzar\': ") == 'comenzar':
+    if input("Si estas listo escribe \'comenzar\': ") == 'comenzar':
         os.system('clear')
         for n in range(0, len(sentence_set)):
             if sentence_set[n]:
@@ -56,7 +54,6 @@ def main(subject_n, sentence_txt):
                 outxt.close()
     else:
         raise Exception
-    print
-    print( '** Fin de la grabación ** gracias!')
+    print('** Fin de la grabación ** gracias!')
 
 main('muestra', 'sentences2read.txt')

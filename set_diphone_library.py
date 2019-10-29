@@ -96,7 +96,7 @@ def setDiphoneLibrary(wav_path, lab_path):
 
         # Warn if a textGrid is missing a paired wav file
         else:
-            print filepath+' does not have wav file with the same name'
+            print(filepath+' does not have wav file with the same name')
 
     # Save diphone dictionary
     pickle.dump(DIPHONES, open("diphone_library.pckl", "wb"))

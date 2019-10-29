@@ -45,10 +45,11 @@ def synthesize(text):
     # 2 subsequental equal sounds
     transcribed_diphones = []
     for n in range(0, len(transcription)):
-        if n != len(transcription)-1 and transcription[n] == transcription[n+1]: pass
-        else: transcribed_diphones.append(transcription[n])
-    print
-    print 'This is the phonetic transcription of the sentence: '+' '.join(transcribed_diphones)
+        if n != len(transcription)-1 and transcription[n] == transcription[n+1]: 
+            pass
+        else: 
+            transcribed_diphones.append(transcription[n])
+    print(('This is the phonetic transcription of the sentence: ' + ' '.join(transcribed_diphones)))
 
     # Get diphone transcription for input text
     sentence_diphones = []
@@ -74,7 +75,7 @@ def synthesize(text):
     first_file = AudioSegment.from_wav('./wav'+filename.replace('.TextGrid', '.wav').replace('./data',''))
     # Slice audio file and concatenate sound to the waveform that is being built
     slice_audio = first_file[t1:t2]
-    print 'Diphone '+'_'.join(target.getDiphone())+' retrieved from file '+filename+' at times '+str(t1)+' and '+str(t2)
+    print(('Diphone ' + '_'.join(target.getDiphone()) + ' retrieved from file ' + filename + ' at times ' + str(t1) + ' and ' + str(t2)))
     generated_audio += slice_audio
 
     # Now that we have the first diphone, we can score the most suitable next candidate
@@ -110,7 +111,7 @@ def synthesize(text):
         all_candidates = sorted(all_candidates, key=lambda x: x[0])
         target = all_candidates[0]
         target_file = AudioSegment.from_wav('./wav'+target[1].replace('.TextGrid', '.wav').replace('./data',''))
-        print 'Diphone '+diphone+' retrieved from file '+target[1]+' at times '+str(target[2])+' and '+str(target[3])
+        print(('Diphone ' + diphone + ' retrieved from file ' + target[1] + ' at times ' + str(target[2]) + ' and ' + str(target[3])))
 
         # Get audio slice
         slice_audio = target_file[target[2]:target[3]]
@@ -120,8 +121,8 @@ def synthesize(text):
     generated_audio += silence
     # Save the generated wave file
     generated_audio.export('generated.wav', format="wav")
-    print 'Synthesis is done! :)'
+    print('Synthesis is done! \1F60A')
 
 # In terminal, use first argument with the text you want synthesize, with the text in quotes
 # Example: python synthesize.py 'hola'
-synthesize(sys.argv[1].decode('utf-8'))
+synthesize(sys.argv[1])

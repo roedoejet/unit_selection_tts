@@ -17,17 +17,17 @@ def ltsRules(text):
     # letter sets
     letsets = {'LNS': ('l', 'n', 's'),
                 'DNSR': ('d', 'n', 's', 'r'),
-                'EI': ('e', 'i', u'é', u'í'),
-                'AEIOUt': (u'á', u'é', u'í', u'ó', u'ú'),
-                'V': ('a', 'e', 'i', 'o', 'u'),
+                'EI': ('e', 'i', 'é', 'í'),
+                'AEIOUt': ('á', 'é', 'í', 'ó', 'ú'),
+                'V': ('a', 'e', 'i', 'o', ''),
                 'C': ('b', 'c', 'd', 'f', 'g', 'h', 'j', 'k',
-                      'l', 'm', 'n', u'ñ', 'p', 'q', 'r', 's',
+                      'l', 'm', 'n', 'ñ', 'p', 'q', 'r', 's',
                       't', 'v', 'w', 'x', 'y', 'z'),
                 'noQ': ('b', 'c', 'd', 'f', 'g', 'h', 'j', 'k',
                       'l', 'm', 'n', 'ñ', 'p', 'r', 's',
                       't', 'v', 'w', 'x', 'y', 'z'),
-                'AV': ('a', 'e', 'i', 'o', 'u', u'á', u'é', u'í', u'ó', u'ú'),
-                'SN': ('p', 't', 'k', 'n', 'm', u'ñ'),
+                'AV': ('a', 'e', 'i', 'o', '', 'á', 'é', 'í', 'ó', 'ú'),
+                'SN': ('p', 't', 'k', 'n', 'm', 'ñ'),
                 'LN': ('l', 'n'),
                 'LR': ('l', 'r') }
 
@@ -51,23 +51,23 @@ def ltsRules(text):
             # u vowel with g
             elif c_let == 'u' and p_let == 'g' and n_let == 'i': pass
             elif c_let == 'u' and p_let == 'g' and n_let == 'e': pass
-            elif c_let == 'u' and p_let == 'g' and n_let == u'í': pass
-            elif c_let == 'u' and p_let == 'g' and n_let == u'é': pass
+            elif c_let == 'u' and p_let == 'g' and n_let == 'í': pass
+            elif c_let == 'u' and p_let == 'g' and n_let == 'é': pass
 
             # stress for written stress marks
-            elif c_let == u'á': phones.append('aS')
-            elif c_let == u'é': phones.append('eS')
-            elif c_let == u'í': phones.append('iS')
-            elif c_let == u'ó': phones.append('oS')
-            elif c_let == u'ú': phones.append('uS')
+            elif c_let == 'á': phones.append('aS')
+            elif c_let == 'é': phones.append('eS')
+            elif c_let == 'í': phones.append('iS')
+            elif c_let == 'ó': phones.append('oS')
+            elif c_let == 'ú': phones.append('uS')
 
-            elif c_let == u'ü': phones.append('u')
+            elif c_let == 'ü': phones.append('u')
 
             # semivowels
-            elif c_let == u'u' and n_let in letsets[u'AV']: phones.append(u'uSC')
-            elif c_let == u'u' and p_let in letsets[u'AV']: phones.append(u'uSV')
-            elif c_let == u'i' and n_let in letsets[u'AV']: phones.append(u'iSC')
-            elif c_let == u'i' and pp_let in letsets[u'noQ']: phones.append(u'iSV')
+            elif c_let == 'u' and n_let in letsets['AV']: phones.append('uSC')
+            elif c_let == 'u' and p_let in letsets['AV']: phones.append('uSV')
+            elif c_let == 'i' and n_let in letsets['AV']: phones.append('iSC')
+            elif c_let == 'i' and pp_let in letsets['noQ']: phones.append('iSV')
 
             # y as vowel and w
             elif c_let == 'y' and n_let == '#': phones.append('i')
@@ -118,7 +118,7 @@ def ltsRules(text):
             elif c_let == 'y': phones.append('llA')
 
             # nasals
-            elif c_let == u'ñ': phones.append('ny')
+            elif c_let == 'ñ': phones.append('ny')
 
             # laterals
             elif c_let == 'l' and n_let == 'l' and nn_let == '#': phones.append('l')
@@ -227,7 +227,7 @@ def stress(syllables):
     S = False
     if '-' in syllables:
         # We are counting syllables from the end of the word
-        for let in reversed(range(0, len(syllables))):
+        for let in reversed(list(range(0, len(syllables)))):
             if syllables[let] == '-':
                 c += 1
             if c == 1 and lastSyl == False:
@@ -240,7 +240,7 @@ def stress(syllables):
                 lastSyl = let
                 c =+ 1
                 last = ['#','#']+syllables[let:]
-                for l in reversed(range(0, len(last))):
+                for l in reversed(list(range(0, len(last)))):
                     if last[l] != '#':
                         c_let = last[l]
                         p_let = last[l+1]
@@ -255,7 +255,7 @@ def stress(syllables):
             elif syllables[let] == '-' and plastSyl == True:
                 plastSyl = let
                 plast = ['#','#']+syllables[let:lastSyl]+['#','#']
-                for l in reversed(range(0, len(plast))):
+                for l in reversed(list(range(0, len(plast)))):
                     if plast[l] != '#':
                         c_let = plast[l]
                         p_let = plast[l+1]
@@ -313,7 +313,7 @@ def transcribe(text):
     syllables = syllabify(phones)
     # Step 5: stress assignment
     # The stress assignment is only run if the word doesn't have the stress mark written
-    if not re.findall(u'[áéúíó]', text):
+    if not re.findall('[áéúíó]', text):
         stressed = stress(syllables)
         return stressed
     # In this case, syllable marks are only used to assign stress and then removed
